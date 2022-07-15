@@ -751,7 +751,7 @@
                     <b-form-select class="select-box" v-model="selectData.model" :options="modelOptions" @change="changeModel"></b-form-select>
                     <b-form-select class="select-box" v-model="selectData.codeCity" :options="provinceOptions"></b-form-select>
                     <b-form-select class="select-box" v-model="selectData.status" :options="statusOptions"></b-form-select>
-                    <b-form-select class="select-box" v-model="selectData.design" :options="designOptions"></b-form-select>
+                    <b-form-select class="select-box" v-model="selectData.bodyType" :options="designOptions"></b-form-select>
                     <b-form-select class="select-box" v-model="selectData.fuel" :options="fuelOptions"></b-form-select>
                   </div>
                 </div>
@@ -766,7 +766,7 @@
                     </div>
                   </div>
                 </div>
-                
+
               </div>
 
               <div class="row">
@@ -1026,7 +1026,7 @@ export default {
         model: null,
         codeCity: null,
         status: null,
-        design: null,
+        bodyType: null,
         fuel: null,
         minPrice: null,
         maxPrice: null,
@@ -1122,7 +1122,9 @@ export default {
     async getListTransport () {
       try {
         const response = await TransportService.getListTransport({
-          codeParent: 'transport'
+          codeParent: 'transport',
+          limit : 50,
+          page : 1
         })
         response.data.transportListRes.map((e) => {
           this.transportOptions.push({ value: e.code, text: e.name })
@@ -1139,7 +1141,9 @@ export default {
         this.selectData.company = null
         this.companyOptions.push({ value: null, text: 'Chọn hãng' })
         const response = await TransportService.getListTransport({
-          codeParent: code ? code : ''
+          codeParent: code ? code : '',
+          limit : 50,
+          page : 1
         })
         response.data.transportListRes.shift()
         response.data.transportListRes.map((e) => {
@@ -1160,7 +1164,9 @@ export default {
         this.selectData.series = null
         this.selectData.model = null
         const { data } = await TransportService.getListTransport({
-          codeParent: code ? code : ''
+          codeParent: code ? code : '',
+          limit : 50,
+          page : 1
         })
         const seriesOptions = data.transportListRes.map((e) => {
           return { value: e.code, text: e.name }
@@ -1184,7 +1190,9 @@ export default {
         this.modelOptions = []
         this.selectData.model = null
         const { data } = await TransportService.getListTransport({
-          codeParent: code ? code : ''
+          codeParent: code ? code : '',
+          limit : 50,
+          page : 1
         })
         const modelOptions = data.transportListRes.map((e) => {
           return { value: e.code, text: e.name }
@@ -1242,7 +1250,7 @@ export default {
 
         this.selectData.minPrice = document.querySelector('.irs-from') ? Number(document.querySelector('.irs-from').textContent.replace(' ', '')) : price.minValue
         this.selectData.maxPrice = document.querySelector('.irs-to') ? Number(document.querySelector('.irs-to').textContent.replace(' ', '')) : price.maxValue
-        
+
         this.selectData.minManufactureYear = document.querySelector('.price_range.year_select .irs-from') ? Number(document.querySelector('.price_range.year_select .irs-from').textContent.replace(' ', '')) : year.minValue
         this.selectData.maxManufactureYear = document.querySelector('.price_range.year_select .irs-to') ? Number(document.querySelector('.price_range.year_select .irs-to').textContent.replace(' ', '')) : year.maxValue
 
@@ -1254,6 +1262,8 @@ export default {
           minManufactureYear: this.selectData.minManufactureYear,
           maxManufactureYear: this.selectData.maxManufactureYear,
           status: this.selectData.status,
+          bodyType: this.selectData.bodyType,
+          fuel: this.selectData.fuel,
           limit: this.search.limit,
           page: this.search.page
         })
