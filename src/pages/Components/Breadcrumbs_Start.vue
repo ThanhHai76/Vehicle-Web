@@ -51,7 +51,7 @@
                 </select>
 
             </div> -->
-          
+
           </div>
         </div>
       </div>
@@ -162,7 +162,9 @@ export default {
     async getTransportMenu (code) {
       try {
         const response = await TransportService.getListTransport({
-          codeParent: code
+          codeParent: code,
+          limit : 50,
+          page : 1
         })
         this.carsMenu_1 = response.data.transportListRes
         this.menuSearch = this.carsMenu_1
@@ -175,7 +177,9 @@ export default {
     async getTransportMenu_2 (code) {
       try {
         const response = await TransportService.getListTransport({
-          codeParent: code
+          codeParent: code,
+          limit : 50,
+          page : 1
         })
         this.menuSearch = response.data.transportListRes
         this.levelMenu = response.data.treeTransport ? response.data.treeTransport.length : 2
@@ -187,7 +191,9 @@ export default {
     async getTransportMenu_parent_2 (code) {
       try {
         const response = await TransportService.getListTransport({
-          codeParent: code
+          codeParent: code,
+          limit : 50,
+          page : 1
         })
         this.carsMenu_2 = response.data.transportListRes
         // this.menuSearch = response.data.transportListRes
@@ -199,7 +205,9 @@ export default {
     async getTransportMenu_parent_3 (code) {
       try {
         const response = await TransportService.getListTransport({
-          codeParent: code
+          codeParent: code,
+          limit : 50,
+          page : 1
         })
         this.carsMenu_3 = response.data.transportListRes
       } catch (error) {

@@ -766,7 +766,7 @@
                     </div>
                   </div>
                 </div>
-                
+
               </div>
 
               <div class="row">
@@ -1122,7 +1122,9 @@ export default {
     async getListTransport () {
       try {
         const response = await TransportService.getListTransport({
-          codeParent: 'transport'
+          codeParent: 'transport',
+          limit : 50,
+          page : 1
         })
         response.data.transportListRes.map((e) => {
           this.transportOptions.push({ value: e.code, text: e.name })
@@ -1139,7 +1141,9 @@ export default {
         this.selectData.company = null
         this.companyOptions.push({ value: null, text: 'Chọn hãng' })
         const response = await TransportService.getListTransport({
-          codeParent: code ? code : ''
+          codeParent: code ? code : '',
+          limit : 50,
+          page : 1
         })
         response.data.transportListRes.shift()
         response.data.transportListRes.map((e) => {
@@ -1160,7 +1164,9 @@ export default {
         this.selectData.series = null
         this.selectData.model = null
         const { data } = await TransportService.getListTransport({
-          codeParent: code ? code : ''
+          codeParent: code ? code : '',
+          limit : 50,
+          page : 1
         })
         const seriesOptions = data.transportListRes.map((e) => {
           return { value: e.code, text: e.name }
@@ -1184,7 +1190,9 @@ export default {
         this.modelOptions = []
         this.selectData.model = null
         const { data } = await TransportService.getListTransport({
-          codeParent: code ? code : ''
+          codeParent: code ? code : '',
+          limit : 50,
+          page : 1
         })
         const modelOptions = data.transportListRes.map((e) => {
           return { value: e.code, text: e.name }
@@ -1242,7 +1250,7 @@ export default {
 
         this.selectData.minPrice = document.querySelector('.irs-from') ? Number(document.querySelector('.irs-from').textContent.replace(' ', '')) : price.minValue
         this.selectData.maxPrice = document.querySelector('.irs-to') ? Number(document.querySelector('.irs-to').textContent.replace(' ', '')) : price.maxValue
-        
+
         this.selectData.minManufactureYear = document.querySelector('.price_range.year_select .irs-from') ? Number(document.querySelector('.price_range.year_select .irs-from').textContent.replace(' ', '')) : year.minValue
         this.selectData.maxManufactureYear = document.querySelector('.price_range.year_select .irs-to') ? Number(document.querySelector('.price_range.year_select .irs-to').textContent.replace(' ', '')) : year.maxValue
 

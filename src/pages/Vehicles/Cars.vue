@@ -64,7 +64,9 @@ export default {
     async getTransportMenu (code) {
       try {
         const response = await TransportService.getListTransport({
-          codeParent: code
+          codeParent: code,
+          limit : 50,
+          page : 1
         })
         this.carsMenu_1 = response.data.transportListRes
         this.menuSearch = this.carsMenu_1

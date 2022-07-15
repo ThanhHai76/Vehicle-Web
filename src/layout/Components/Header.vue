@@ -2,7 +2,11 @@
   <div class="impl_header_wrapper">
     <div class="impl_logo">
       <a href="/">
-        <img src="@/assets/images/logoxesang.png" alt="Logo" class="img-fluid" />
+        <img
+          src="@/assets/images/logoxesang.png"
+          alt="Logo"
+          class="img-fluid"
+        />
         <!-- <img src="http://sanxesang.com:7102/resources/images/logo.png" alt="Logo" class="img-fluid" /> -->
       </a>
     </div>
@@ -24,12 +28,14 @@
                 </li>
               </ul>
               <p class="impl_header_time">
-                <i class="fa fa-clock-o" aria-hidden="true"></i> Mở cửa -
-                08:00 đến 20:00 kể cả chủ nhật
+                <i class="fa fa-clock-o" aria-hidden="true"></i> Mở cửa - 08:00
+                đến 20:00 kể cả chủ nhật
               </p>
               <ul class="impl_header_icons">
                 <li class="impl_search">
-                  <span><i class="fa fa-plus-circle" aria-hidden="true"></i></span>
+                  <span
+                    ><i class="fa fa-plus-circle" aria-hidden="true"></i
+                  ></span>
                 </li>
                 <!-- <li class="cart-popup">
                   <a href="#"
@@ -245,9 +251,7 @@
                 /></a>
               </div>
               <a href="#" class="impl_btn">
-                <router-link to="/sell-step">
-                  Đăng ký
-                </router-link>
+                <router-link to="/sell-step"> Đăng ký </router-link>
               </a>
               <div class="impl_menu">
                 <nav>
@@ -256,15 +260,27 @@
                   </div>
                   <ul>
                     <li class="dropdown">
-                      <a href="/" :class="{'active': $route.path === '/'}">Trang chủ</a>
+                      <a href="/" :class="{ active: $route.path === '/' }"
+                        >Trang chủ</a
+                      >
                     </li>
-                    <li class="dropdown" v-for="item in menuHeader" :key="item.id">
-                      <a href="javascript:void(0)" @click="changeRoute(item.code)"
-                        :class="{'active': (currentRoute === item.code || $route.path === item.code)}">
+                    <li
+                      class="dropdown"
+                      v-for="item in menuHeader"
+                      :key="item.id"
+                    >
+                      <a
+                        href="javascript:void(0)"
+                        @click="changeRoute(item.code)"
+                        :class="{
+                          active:
+                            currentRoute === item.code ||
+                            $route.path === item.code,
+                        }"
+                      >
                         {{ item.name }}
                       </a>
                     </li>
-
                   </ul>
                 </nav>
               </div>
@@ -277,85 +293,88 @@
 </template>
 
 <script>
-import { TransportService } from '@/services/transport.service'
-import { EndpointService } from '@/services/endpoint.service'
+import { TransportService } from "@/services/transport.service";
+import { EndpointService } from "@/services/endpoint.service";
 export default {
-  name: 'Header',
+  name: "Header",
 
-  data () {
+  data() {
     return {
-      dataUser: JSON.parse(localStorage.getItem('userData')),
+      dataUser: JSON.parse(localStorage.getItem("userData")),
       endpoint: {},
       menuHeader: [],
-      currentRoute: '',
+      currentRoute: "",
       transportName: [
-        { id: 'car', text: 'ô tô' },
-        { id: 'motorcycle', text: 'xe máy' },
-        { id: 'bicycle', text: 'xe đạp' }
-      ]
-    }
+        { id: "car", text: "ô tô" },
+        { id: "motorcycle", text: "xe máy" },
+        { id: "bicycle", text: "xe đạp" },
+      ],
+    };
   },
   props: {
     headerbg: String,
     isOpen: Boolean,
-    isOpenMobile: Boolean
+    isOpenMobile: Boolean,
   },
 
   filters: {
-    transformName (name, transportName) {
-      const transport = transportName.filter(item => item.id === name)
-      return transport[0] ? transport[0].text : name
-    }
+    transformName(name, transportName) {
+      const transport = transportName.filter((item) => item.id === name);
+      return transport[0] ? transport[0].text : name;
+    },
   },
 
-  async created () {
-    await this.getEndpoint()
-    this.getTransportMenu()
-    const currentPath = this.$route.path
-    if (this.currentRoute === '') this.currentRoute = currentPath.substring(1, currentPath.length)
+  async created() {
+    await this.getEndpoint();
+    this.getTransportMenu();
+    const currentPath = this.$route.path;
+    if (this.currentRoute === "")
+      this.currentRoute = currentPath.substring(1, currentPath.length);
   },
 
   methods: {
-    async logout () {
-      await this.$store.dispatch('user/clear')
-      this.$store.dispatch('auth/logout')
+    async logout() {
+      await this.$store.dispatch("user/clear");
+      this.$store.dispatch("auth/logout");
     },
 
-    changeRoute (route) {
-      this.currentRoute = route
-      this.$router.push(route)
+    changeRoute(route) {
+      this.currentRoute = route;
+      this.$router.push(route);
       // this.$router.replace({ path: route })
     },
 
-    goToAdmin () {
-      window.location.href = `${process.env.VUE_APP_DOMAIN_ADMIN}/login`
+    goToAdmin() {
+      window.location.href = `${process.env.VUE_APP_DOMAIN_ADMIN}/login`;
     },
 
-    async getEndpoint () {
+    async getEndpoint() {
       try {
-        const response = await EndpointService.getConfig()
-        this.endpoint = response.data
-        await this.$store.dispatch('endpoint/getEndpointConfig')
+        const response = await EndpointService.getConfig();
+        this.endpoint = response.data;
+        await this.$store.dispatch("endpoint/getEndpointConfig");
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
 
-    async getTransportMenu () {
+    async getTransportMenu() {
       try {
         const response = await TransportService.getListTransportHeader({
           data: {
-            codeParent: 'transport'
+            codeParent: "transport",
+            limit: 50,
+            page: 1,
           },
-          endpoint: this.endpoint['hnp.luxury.transport.get-list-transport']
-        })
-        this.menuHeader = response.data.transportListRes
+          endpoint: this.endpoint["hnp.luxury.transport.get-list-transport"],
+        });
+        this.menuHeader = response.data.transportListRes;
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped></style>
